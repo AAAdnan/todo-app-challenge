@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { TodoContext } from '../context/todo';
 import AddTodo from './AddTodo';
@@ -6,6 +6,8 @@ import Todo from './Todo';
 
 const TodoList = () => {
   const { state, dispatch } = useContext(TodoContext);
+  const [filter, setFilter] = useState("all");
+
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
@@ -24,34 +26,64 @@ const TodoList = () => {
 
   const remainingTasks = state.todos.filter((todo) => !todo.completed);
 
+
+  const filteredTodos = state.todos.filter((todo) => {
+    if (filter === "all") {
+      return true;
+    } else if (filter === "completed") {
+      return todo.completed;
+    } else {
+      return !todo.completed;
+    }
+  });
+
   return (
     <ThemeProvider theme={vapourwaveTheme}>
-      <Layout>
-        <Container>
-          <Heading>TodoList</Heading>
-          <Subtitle>Number of tasks remaining: {remainingTasks.length}</Subtitle>
-          <Table>
-            <thead>
-              <tr>
-                <TableHeader>Task</TableHeader>
-                <TableHeader>Actions</TableHeader>
-              </tr>
-            </thead>
-            <tbody>
-              {state.todos.map((todo, index) => (
-                <Todo
-                  key={index}
-                  todo={todo}
-                  id={index}
-                  handleDelete={handleDelete}
-                  handleComplete={handleComplete}
-                />
-              ))}
-            </tbody>
-          </Table>
-          <AddTodo />
-        </Container>
-      </Layout>
+    <Layout>
+      <Container>
+        <Heading>TodoList</Heading>
+        <Subtitle>Number of tasks remaining: {remainingTasks.length}</Subtitle>
+        <Table>
+          <thead>
+            <tr>
+              <TableHeader>Task</TableHeader>
+              <TableHeader>Actions</TableHeader>
+            </tr>
+          </thead>
+          <tbody>
+          {filteredTodos.map((todo, index) => (
+            <tr key={index}>
+              <Todo
+                key={index}
+                todo={todo}
+                id={index}
+                handleDelete={handleDelete}
+                handleComplete={handleComplete}
+              />
+            </tr>
+          ))}
+        </tbody>
+        </Table>
+        <FilterButtons>
+          <Button onClick={() => setFilter("all")} active={filter === "all"}>
+            All
+          </Button>
+          <Button
+            onClick={() => setFilter("completed")}
+            active={filter === "completed"}
+          >
+            Completed
+          </Button>
+          <Button
+            onClick={() => setFilter("active")}
+            active={filter === "active"}
+          >
+            Active
+          </Button>
+        </FilterButtons>
+        <AddTodo />
+      </Container>
+    </Layout>
     </ThemeProvider>
   );
 };
@@ -106,5 +138,31 @@ const TableHeader = styled.th`
   text-align: center;
 `;
 
+const TableRow = styled.tr`
+  display: flex;
+`;
+
+const Button = styled.button`
+  flex-grow: 1;
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.primaryColor};
+  background-color: ${({ theme }) => theme.backgroundColor};
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.primaryColor};
+    color: ${({ theme }) => theme.backgroundColor};
+  }
+`;
+
+const FilterButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 1rem;
+`;
 
 export default TodoList;

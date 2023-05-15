@@ -22,7 +22,7 @@ const Todo = ({ todo, id, handleDelete, handleComplete }) => {
 const TodoItem = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin: 1rem 1rem;
 `;
 
 const Checkbox = styled.input`
@@ -37,7 +37,6 @@ const TodoText = styled.span`
 
 const DeleteButton = styled.button`
   padding: 0.5rem 1rem;
-  margin: auto;
   font-size: 1rem;
   color: ${({ theme }) => theme.primaryColor};
   background-color: ${({ theme }) => theme.backgroundColor};
