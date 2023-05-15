@@ -1,13 +1,22 @@
 import React from 'react';
 
-export const Todo = ( { todo, id, handleDelete }) => {
-  
+const Todo = ({ todo, id, handleDelete, handleComplete }) => {
+    
+  const handleCheckboxChange = () => {
+    handleComplete(id);
+  };
+
   return (
-    <>
     <div>
-        <p>{todo.text}</p>
-        <button onClick={() => handleDelete(id)}>Delete</button>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={handleCheckboxChange}
+      />
+      <span>{todo.text}</span>
+      <button onClick={() => handleDelete(id)}>Delete</button>
     </div>
-    </>
-  )
+  );
 };
+
+export default Todo;

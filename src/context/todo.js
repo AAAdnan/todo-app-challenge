@@ -21,6 +21,19 @@ const reducer = (state, action) => {
                 todos: state.todos.filter((todo, index) => index !== action.payload)
             }
         }
+        case 'COMPLETE_TODO': {
+            const { payload } = action;
+            const updatedTodos = state.todos.map((todo, index) => {
+              if (index === payload) {
+                return { ...todo, completed: true };
+              }
+              return todo;
+            });
+            return {
+              ...state,
+              todos: updatedTodos
+            };
+        }
         default: {
             return state;
         }
