@@ -2,16 +2,25 @@ import styled from 'styled-components';
 import { useContext } from 'react';
 import AddTodo from './AddTodo';
 import { TodoContext } from "../context/todo";
+import { Todo } from '../components/Todo';
 
 const TodoList = () => {
-    const { state } = useContext(TodoContext);
+    const { state, dispatch } = useContext(TodoContext);
+
+    const handleDelete = (id) => {
+      dispatch({ type: 'DELETE_TODO', payload: id });
+    };
   
-    console.log(state)
+    console.log(state.todos)
   
     return (
       <Layout>
         <div>
           <Heading>TodoList</Heading>
+          <p>Number of tasks remaining: </p>
+           { state.todos.map((todo, index) => (
+            <Todo todo={todo} key={index} id={index} handleDelete={handleDelete} />
+           ))}
           <AddTodo />
         </div>
       </Layout>

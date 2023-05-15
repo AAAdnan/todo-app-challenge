@@ -8,7 +8,11 @@ export default function AddTodo() {
 
     const addTodo = (e) => {
         e.preventDefault();
-        dispatch({ type: 'ADD_TODO', payload: todo });
+        const newTodo = {
+          text: todo,
+          completed: false
+        }
+        dispatch({ type: 'ADD_TODO', payload: newTodo });
         setTodo("");
     }
  

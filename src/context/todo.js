@@ -8,13 +8,19 @@ const initialState = {
 const reducer = (state, action) => {
     console.log('reducer', state, action)
     switch(action.type){ 
-        case "ADD_TODO": {
+        case 'ADD_TODO': {
+            const newTodo = { ...action.payload, completed: false };
+            return {
+              ...state,
+              todos: [...state.todos, newTodo]
+            };
+        }
+        case "DELETE_TODO": {
             return {
                 ...state,
-                todos: [...state.todos, action.payload]
+                todos: state.todos.filter((todo, index) => index !== action.payload)
             }
         }
-
         default: {
             return state;
         }
