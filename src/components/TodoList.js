@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { TodoContext } from '../context/todo';
 import AddTodo from './AddTodo';
@@ -6,6 +6,13 @@ import Todo from './Todo';
 
 const TodoList = () => {
   const { state, dispatch } = useContext(TodoContext);
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos) {
+      dispatch({ type: 'SET_TODOS', payload: JSON.parse(storedTodos) });
+    }
+  }, [dispatch]);
 
   const handleDelete = (id) => {
     dispatch({ type: 'DELETE_TODO', payload: id });
